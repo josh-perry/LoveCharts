@@ -1,7 +1,7 @@
 ## LoveCharts
 
 ### Example
-'''lua
+```lua
 local LineGraph = require("lovecharts/line")
 local time = 0
 
@@ -26,4 +26,4 @@ function love.update(dt)
   end
 
   line:update()
-end'''
+end```
