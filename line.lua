@@ -5,10 +5,17 @@ function LineGraph.new(dataY)
   local self = setmetatable({}, LineGraph)
 
   self.dataY = {}
+  self.dataX = {}
+
   self.maxXDisplay = 8
-  self.filled = true
+  self.filled = false
   self.maxY = math.max(unpack(self.dataY))
   self.maxX = nil
+
+  self.verticalGridLines = true
+  self.horizontalGridLines = true
+
+  self.gridColor = {255, 255, 255, 50}
 
   return self
 end
@@ -34,6 +41,7 @@ function LineGraph:draw(x, y, w, h)
   local lines = {}
   local count = 0
   for i, v in ipairs(self.dataY) do
+    love.graphics.setColor(255, 255, 255)
     if i >= #self.dataY - self.maxXDisplay then
       local offsetY = v * baseOffsetY
       local offsetX = count * baseOffsetX
@@ -42,7 +50,30 @@ function LineGraph:draw(x, y, w, h)
       table.insert(lines, x + offsetX + 0.5)
       table.insert(lines, y + h - offsetY + 0.5)
 
+      -- if self.verticalGridLines then
+      --   love.graphics.setColor(self.gridColor)
+      --   love.graphics.line(x + offsetX + 0.5, y, x + offsetX + 0.5, y + h)
+      -- end
+
       count = count + 1
+    end
+  end
+
+  love.graphics.setColor(self.gridColor)
+  local horizontalGridSpacing = math.floor(h / 5)
+  if self.horizontalGridLines then
+    for i = 0, h / horizontalGridSpacing do
+      love.graphics.line(x, y + (i * horizontalGridSpacing), x + w, y + (i * horizontalGridSpacing))
+    end
+  end
+
+  love.graphics.setColor(255, 255, 0)
+  local verticalGridSpacing = math.floor(w / 5)
+  if self.verticalGridLines then
+    for i = 0, w / verticalGridSpacing do
+      love.graphics.setColor(self.gridColor)
+      love.graphics.line(x + (i * verticalGridSpacing), y, x + (i * verticalGridSpacing), y + h)
+      -- love.graphics.line(x + offsetX + 0.5, y, x + offsetX + 0.5, y + h)
     end
   end
 
